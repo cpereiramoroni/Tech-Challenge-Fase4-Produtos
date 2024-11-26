@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ProjectGuid>{3AF9B826-F284-432C-BCBF-B2A781C5E5C4}</ProjectGuid>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+		<PackageReference Include="Corporativo.Log" Version="1.0.*" />
+		<PackageReference Include="Corporativo.Result" Version="1.0.*" />
+		<PackageReference Include="Corporativo.Util" Version="1.0.*" />
+		<PackageReference Include="Corporativo.Encrypt" Version="1.0.*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\App.Domain\App.Domain.csproj" />
+	</ItemGroup>
+</Project>

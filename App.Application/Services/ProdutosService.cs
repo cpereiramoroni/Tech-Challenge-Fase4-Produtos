@@ -21,20 +21,20 @@ namespace Application.Services
 
         public async Task PostProduto(PostProduto input)
         {
-            var item = new  ProdutoBD(input.IdCategoria, input.NomeProduto, input.ValorProduto, input.Ativo);
+            var item = new ProdutoBD(input.IdCategoria, input.NomeProduto, input.ValorProduto, input.Ativo);
             await _repository.PostProduto(item);
         }
 
         public async Task UpdateProdutoById(int produtoId, PatchProduto input)
         {
-            
-            
+
+
             ProdutoBD item = await ExistProduto(produtoId);
 
             item.Status = input.Ativo ?? item.Status;
             item.Preco = input.ValorProduto ?? item.Preco;
             item.Nome = !string.IsNullOrEmpty(input.NomeProduto) ? input.NomeProduto : item.Nome;
-            
+
             item.ValidateEntity();
 
             await _repository.UpdateProduto(item);
@@ -64,8 +64,8 @@ namespace Application.Services
             var itemProduto = await _repository.GetProdutoById(produtoId);
             if (itemProduto is null)
                 throw new ValidationException("Produto não encontrado.");
-            
-            return  itemProduto;
+
+            return itemProduto;
         }
 
 

@@ -25,5 +25,9 @@
 		<None Update="serverless.template">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<InternalsVisibleTo Include="App.Test" />
 	</ItemGroup>
+	
+	
+
 </Project>

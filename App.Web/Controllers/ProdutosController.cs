@@ -44,7 +44,7 @@ namespace Api.Controllers
         {
 
             var lstRtn = await _produtosService.GetProdutoByCategoria(IdCategoria);
-            if (lstRtn.Count==0)
+            if (lstRtn.Count == 0)
                 return NoContent();
             return Ok(lstRtn);
         }
@@ -75,7 +75,7 @@ namespace Api.Controllers
 ", Tags = new[] { "Produtos" }
    )]
         [Consumes("application/json")]
-        public async Task<IActionResult> PostCliente([FromBody] PostProduto input)
+        public async Task<IActionResult> Post([FromBody] PostProduto input)
         {
             await _produtosService.PostProduto(input);
             return StatusCode((int)HttpStatusCode.Created);
@@ -109,7 +109,7 @@ namespace Api.Controllers
             Tags = new[] { "Produtos" }
         )]
         [Consumes("application/json")]
-        public async Task<IActionResult> PatchCliente([FromRoute] int idProduto, [FromBody] PatchProduto input)
+        public async Task<IActionResult> Patch([FromRoute] int idProduto, [FromBody] PatchProduto input)
         {
             await _produtosService.UpdateProdutoById(idProduto, input);
 

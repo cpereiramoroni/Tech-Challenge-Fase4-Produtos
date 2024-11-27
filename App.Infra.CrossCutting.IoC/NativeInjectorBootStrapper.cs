@@ -1,8 +1,6 @@
 ﻿using App.Application.Interfaces;
-using App.Application.Services;
 using App.Domain.Interfaces;
 using App.Infra.Data.Context;
-using App.Infra.Data.Repository;
 using Application.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,7 +22,7 @@ namespace App.Infra.CrossCutting.IoC
             ///  INSTACIAS DE SERVICES
             /// 
             ///
-            services.AddScoped<IHealthCheckService, HealthCheckService>();
+
             services.AddScoped<IProdutosService, ProdutosService>();
             ////=======================================================================
             ///
@@ -32,7 +30,7 @@ namespace App.Infra.CrossCutting.IoC
             /// 
             ///
             services.AddScoped<IProdutosRepository, ProdutosRepository>();
-            services.AddScoped<IHealthCheckRepository, HealthCheckRepository>();
+
             ////=======================================================================
             ///
             ///  INSTACIAS DE CONTEXTO

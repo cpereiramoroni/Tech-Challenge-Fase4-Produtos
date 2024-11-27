@@ -2,7 +2,9 @@
 using App.Domain.Interfaces;
 using App.Infra.CrossCutting.IoC;
 using App.Test.Configurations;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -14,15 +16,27 @@ namespace App.Test._4_Infra._4._2___CrossCutting
 
         public NativeInjectorBootStrapperTest()
         {
+
+            var myConfiguration = new Dictionary<string, string>
+            {
+                {"ConnectionProdutos", "Value1"},
+
+            };
+
+            var configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(myConfiguration)
+                .Build();
+
+
             services = new ServiceCollection();
-            NativeInjectorBootStrapper.RegisterServices(services);
+            NativeInjectorBootStrapper.RegisterServices(services, configuration);
         }
 
         [Trait("Categoria", "NativeInjectorBootStrapper")]
         [Theory(DisplayName = "NativeInjectorBootStrapper")]
-        [InlineData(typeof(IHealthCheckService))]
+        [InlineData(typeof(IProdutosRepository))]
 
-        [InlineData(typeof(IHealthCheckRepository))]
+        [InlineData(typeof(IProdutosService))]
 
 
 

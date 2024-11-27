@@ -32,7 +32,7 @@ namespace App.Domain.Interfaces
             }
 
             return await query.ToListAsync();
-        }            
+        }
 
         public async Task<ProdutoBD> GetProdutoById(int id)
         {

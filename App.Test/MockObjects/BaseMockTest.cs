@@ -1,7 +1,5 @@
 ﻿using AutoFixture;
-using Corporativo.Result;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace App.Test.MockObjects
@@ -41,13 +39,6 @@ namespace App.Test.MockObjects
 
 
 
-        public static PagedResult<dynamic> NewPagedResult<T>(int total, bool isValid = true, int offset = 0, int limit = 10)
-        {
-            var list = ListNewModelMock<T>(total, isValid);
-
-            return new PagedResult<dynamic>(offset, limit, total, list.Skip(offset).Take(limit).Cast<dynamic>().ToList());
-
-        }
         /// <summary>
         /// Check is null all itens in an class
         /// this test is to classbase and class that retun of bd

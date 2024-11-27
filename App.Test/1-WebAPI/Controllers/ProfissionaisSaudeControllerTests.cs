@@ -1,241 +1,156 @@
-﻿using App.Application.Interfaces;
+﻿using Api.Controllers;
+using App.Application.Interfaces;
 using App.Application.ViewModels.Request;
 using App.Application.ViewModels.Response;
-using App.Test.MockObjects;
-using App.WebAPI.Controllers;
-using Corporativo.Result;
-using Corporativo.Util.Enum;
-using Fleury.Tests;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
+using App.Domain.Models;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System.Linq;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace App.Test._1_WebAPI.Controllers
 {
-    public class ProfissionaisSaudeControllerTests
+    public class ProdutosControllerTests
     {
-        public ProfissionaisSaudeController controller;
-        private readonly Mock<IPSAppService> _appService = new Mock<IPSAppService>();
+        public ProdutosController _controller;
+        private readonly Mock<IProdutosService> _appServive = new();
+        private readonly List<Produto> _fakeProdutos = new List<Produto>();
 
-        public ProfissionaisSaudeControllerTests()
+        public ProdutosControllerTests()
         {
-            controller = new ProfissionaisSaudeController(_appService.Object);
-            ControllerBaseTest.GenerateBaseContext(controller);
-        }
-
-        #region [Bearer Token]
-
-        [Trait("Categoria", "ProfissionaisSaudeController")]
-        [Fact(DisplayName = "Token OK ")]
-        public void ProfissionaisSaudesController_DeveContem_Token()
-        {
-            ControllerBaseTest.Controller_DeveContem_Token(controller);
-        }
-
-        [Trait("Categoria", "ProfissionaisSaudesController")]
-        [Fact(DisplayName = "Token Error ")]
-        public void ProfissionaisSaudesController_NaoDeveContem_Token()
-        {
-            ControllerBaseTest.Controller_NaoContem_Token(controller);
-        }
-
-        #endregion
-
-        #region POST
-
-        [Trait("Categoria", "ProfissionaisSaudeController")]
-        [Fact(DisplayName = "Post OK")]
-
-        public async Task ProfissionaisSaudeController_Post_Ok()
-        {
-            //Arrange
-            var postProfissionalSaude = MockPostPF.OK().FirstOrDefault();
-
-            var rtn = BaseMockTest.NewModelMock<ProfissionalSaude>(true);
-            _appService.Setup(x => x.Post(It.IsAny<PostProfissionalSaude>()))
-                .ReturnsAsync(new CreatedResult<ProfissionalSaude>(rtn));
-
-            //Act
-
-            var result = await controller.Post(postProfissionalSaude);
-            var statusCodeResult = result as IStatusCodeActionResult;
-            //Assert
-
-            Assert.Equal(201, statusCodeResult.StatusCode);
-        }
+            _controller = new ProdutosController(_appServive.Object);
 
 
-        [Trait("Categoria", "ProfissionaisSaudeController")]
-        [Fact(DisplayName = "Post PreconditionFailed ")]
-        public async Task ProfissionaisSaudesController_Post_PreconditionFailed()
-        {
-
-
-            var observacao = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-
-            //Arrange
-            var postProfissionalSaude = new PostProfissionalSaude
+            for (int i = 1; i < 10; i++)
             {
-                idPessoaFisica = 1,
-                permiteParticipacaoPesquisas = Status.Nao,
-                permiteParticipacaoEventos = Status.Sim,
-                autorizaEnvioEmails = Status.Sim,
-                status = 2,
-                conselhoRegional = "Teste",
-                numeroCertificado = "12",
-                ufCertificado = EstadoSigla.PR,
-                localFormacao = "asdf",
-                anoFormacao = 1998,
-                indicacao = 1,
-                scoreInformado = 1.0m,
-                scoreCalculado = 1.2m,
-                dataValidadeScore = "22/10/2022",
-                descricaoMotivoScore = "descricao",
-                unidadeFicha = "123",
-                numeroFicha = observacao,
-                idUsuarioInclusao = 123,
-                observacaoInclusao = "observacao"
-            };
-            controller.BindViewModelState(postProfissionalSaude);
-
-
-            //Act
-            var result = await controller.Post(postProfissionalSaude);
-            var statusCodeResult = result as IStatusCodeActionResult;
-
-            //Assert
-            Assert.NotNull(result);
-            Assert.Equal(412, statusCodeResult.StatusCode);
-        }
-
-
-        #endregion
-
-        [Trait("Categoria", "ProfissionaisSaudeController")]
-        [Fact(DisplayName = "Post PreconditionFailed ")]
-        public async Task ProfissionaisSaudesController_Post_PreconditionFailed_Automatizado()
-        {
-            foreach (var item in MockPostPF.PreCondition())
-            {
-                controller.BindViewModelState(item);
-
-
-                //Act
-                var result = await controller.Post(item);
-                var statusCodeResult = result as IStatusCodeActionResult;
-
-                //Assert
-                Assert.NotNull(result);
-                Assert.Equal(412, statusCodeResult.StatusCode);
+                _fakeProdutos.Add(new Produto(new ProdutoBD(1, "teste" + i,
+                    i, true)));
             }
         }
 
-        #region Post TermoAceite
-        [Trait("Categoria", "ProfissionaisSaudeController")]
-        [Fact(DisplayName = "PostTermoAceite OK")]
 
-        public async Task ProfissionaisSaudeController_PostTermoAceite_Ok()
+
+        #region [GET]
+        [Fact(DisplayName = "BuscarListaProdutos Ok")]
+        public async Task GetProdutos_Returns_Ok()
         {
-            //Arrange
-            var postTermo = MockPostPF.OkTermo();
-            var idProfissionalSaude = MockPostPF.OKIdLogin();
+            // Arrange
+            _appServive.Setup(service => service.GetProdutoByCategoria(1))
+                .ReturnsAsync(_fakeProdutos);
 
-            _appService.Setup(x => x.PostTermoAceite(It.IsAny<IdProfissionalSaude>(), It.IsAny<PostTermoAceite>()))
-                .ReturnsAsync(new CreatedResult<string>("Criado com sucesso."));
+            // Act
+            var result = await _controller.GetProdutos(1);
 
-            //Act
-            var result = await controller.PostTermoAceite(idProfissionalSaude, postTermo);
-            var statusCodeResult = result as IStatusCodeActionResult;
-            //Assert
+            // Assert
+            Assert.True(result is OkObjectResult);
 
-            Assert.Equal(201, statusCodeResult.StatusCode);
+
+        }
+        [Fact(DisplayName = "BuscarListaProdutos Empty")]
+        public async Task GetProdutos_Returns_Empty()
+        {
+            // Arrange
+            _appServive.Setup(service => service.GetProdutoByCategoria(10))
+                .ReturnsAsync(new List<Produto>());
+
+            // Act
+            var result = await _controller.GetProdutos(10);
+
+            // Assert
+            Assert.True(result is NoContentResult);
+
+
         }
 
-        [Trait("Categoria", "ProfissionaisSaudeController")]
-        [Fact(DisplayName = "PostTermo PreconditionFailed ")]
-        public async Task ProfissionaisSaudesTermo_Post_PreconditionFailed()
-        {
-
-            //Arrange
-            var idProfissionalSaude = MockPostPF.OKIdLogin();
-            var postTermo = new PostTermoAceite
-            {
-                idFicha = "123",
-                idItem = 1,
-                idStatus = null,
-                numeroIp = null
-            };
-            controller.BindViewModelState(postTermo);
-
-
-            //Act
-            var result = await controller.PostTermoAceite(idProfissionalSaude, postTermo);
-            var statusCodeResult = result as IStatusCodeActionResult;
-
-            //Assert
-            Assert.NotNull(result);
-            Assert.Equal(412, statusCodeResult.StatusCode);
-        }
 
         #endregion
 
-        #region PATCH /profissionais-saude/{idProfissionalSaude}
-        [Trait("Categoria", "ProfissionaisSaudeController")]
-        [Fact(DisplayName = "PATCH profissionais-saude OK")]
+        #region [POST]
 
-        public async Task ProfissionaisSaudePatch_Controller_Ok()
+        [Fact(DisplayName = "PostProdutos Ok")]
+        public async Task PostProdutos_ReturnsOkResult()
         {
-            //Arrange
-            var idProfissionalSaude = MockPostPF.OKIdLogin();
-
-            var patch = new PatchProfissionalSaude
+            // Arrange
+            var item = new PostProduto
             {
-                idUsuarioAlteracao = 123,
-                motivoAlteracao = "motivo"
+                Ativo = true,
+                IdCategoria = 1,
+                NomeProduto = "Teste Post",
+                ValorProduto = 1
             };
+            _appServive.Setup(service => service.PostProduto(It.IsAny<PostProduto>()));
 
-            controller.BindViewModelState(idProfissionalSaude);
-            controller.BindViewModelState(patch);
-
-
-            _appService.Setup(x => x.PatchProfissionalSaude(It.IsAny<IdProfissionalSaude>(), It.IsAny<PatchProfissionalSaude>()))
-                .ReturnsAsync(new SuccessResult<string>("atualizado"));
-
-            //Act
-            var result = await controller.PatchProfissionalSaude(idProfissionalSaude, patch);
-            var statusCodeResult = result as IStatusCodeActionResult;
-
-            //Assert
-            Assert.Equal(200, statusCodeResult.StatusCode);
+            // Act
+            var result = await _controller.Post(item);
+            // Assert
+            Assert.True(result is StatusCodeResult);
         }
 
-        [Trait("Categoria", "ProfissionaisSaudeController")]
-        [Fact(DisplayName = "PATCH profissionais-saud PreconditionFailed ")]
-        public async Task ProfissionaisSaudePatch_Controller_PreconditionFailed()
+
+
+
+        #endregion
+
+        #region [PATCH]
+
+
+
+        [Fact(DisplayName = "PatchProdutos OK")]
+        public async Task PatchProdutos_Returns_OK()
         {
-            //Arrange
-            var idProfissionalSaude = MockPostPF.OKIdLogin();
-            var patch = new PatchProfissionalSaude
+            // Arrange
+            var item = new PatchProduto
             {
-                idUsuarioAlteracao = 123,
-                motivoAlteracao = null,
-                conselhoRegional = null,
-                numeroCertificado = null,
-                ufCertificado = null,
-                idStatus = 6
+                Ativo = true,
+                IdCategoria = 1,
+                NomeProduto = "Teste Post",
+                ValorProduto = 1
             };
-            controller.BindViewModelState(patch);
+            _appServive.Setup(service => service.UpdateProdutoById(It.IsAny<int>(), It.IsAny<PatchProduto>()));
 
-            //Act
-            var result = await controller.PatchProfissionalSaude(idProfissionalSaude, patch);
-            var statusCodeResult = result as IStatusCodeActionResult;
-
-            //Assert
-            Assert.NotNull(result);
-            Assert.Equal(412, statusCodeResult.StatusCode);
+            // Act
+            var result = await _controller.Patch(10, item);
+            // Assert
+            Assert.True(result is OkObjectResult);
         }
+
+
+        #endregion
+
+
+
+        #region [DELETE]
+
+        [Fact(DisplayName = "DeleteProdutos OkResult")]
+        public async Task DeleteProdutos_ReturnsOkResult()
+        {
+            // Arrange
+            _appServive.Setup(service => service.DeleteProdutoById(It.IsAny<int>()));
+
+            // Act
+            var result = await _controller.DeleteProdutos(10);
+
+            // Assert
+            Assert.True(result is OkObjectResult);
+        }
+
+
+        [Fact(DisplayName = "DeleteProdutos Throws ValidationException When Produto Not Found")]
+        public async Task DeleteProdutos_ThrowsValidationException_WhenProdutoNotFound()
+        {
+            // Arrange
+            string expectedErrorMessage = "Produto Zero.";
+            _appServive.Setup(service => service.DeleteProdutoById(It.IsAny<int>()))
+                .Throws(new ValidationException(expectedErrorMessage));
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<ValidationException>(() => _controller.DeleteProdutos(5));
+            Assert.Equal(expectedErrorMessage, exception.Message);
+        }
+
+
         #endregion
     }
 }

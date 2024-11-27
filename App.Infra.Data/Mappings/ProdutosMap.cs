@@ -6,9 +6,9 @@ namespace App.Infra.Data.Mappings
 {
     public class ProdutosMap : IEntityTypeConfiguration<ProdutoBD>
     {
-        public ProdutosMap() 
-        { 
-        
+        public ProdutosMap()
+        {
+
         }
         public void Configure(EntityTypeBuilder<ProdutoBD> builder)
         {

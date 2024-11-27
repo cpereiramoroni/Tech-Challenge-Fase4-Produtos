@@ -1,3 +1,4 @@
+
 using Api.Middleware;
 using App.Infra.CrossCutting.IoC;
 using Microsoft.OpenApi.Models;
@@ -24,7 +25,7 @@ builder.Services.AddSwaggerGen(c =>
         {
             Title = "Lambda FIAP04 Produtos -- https://docs.aws.amazon.com/pt_br/lambda/latest/dg/csharp-package-asp.html",
             Version = "v1",
-            Description = "API for FIAP Lambda Produtos Fase 04- Gerenciamento de Produtos.", 
+            Description = "API for FIAP Lambda Produtos Fase 04- Gerenciamento de Produtos.",
             Contact = new OpenApiContact
             {
                 Name = "G24",  // Replace with your name or team

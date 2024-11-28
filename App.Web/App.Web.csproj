@@ -26,6 +26,7 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<InternalsVisibleTo Include="App.Test" />
+		<InternalsVisibleTo Include="BDD" />
 	</ItemGroup>
 	
 	

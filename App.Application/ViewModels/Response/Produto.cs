@@ -5,7 +5,10 @@ namespace App.Application.ViewModels.Response
 {
     public class Produto
     {
-
+        public Produto()
+        {
+                
+        }
         public Produto(Domain.Models.ProdutoBD _produto)
         {
 

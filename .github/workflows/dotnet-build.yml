@@ -57,6 +57,6 @@ jobs:
         run: dotnet tool install -g Amazon.Lambda.Tools
       
       - name: Deploy to AWS Lambda
-        run: dotnet lambda deploy-serverless -sn App.Web -sb s3lambdafiapf4 -t serverless.template --region us-east-1
+        run: dotnet lambda deploy-serverless -sn ./src/App.Web -sb s3lambdafiapf4 -t serverless.template --region us-east-1
 
 

@@ -23,16 +23,16 @@ jobs:
           dotnet-version: '8.x'
           
       - name: Install dependencies Build
-        run: dotnet restore ./App.WebAPI/App.WebAPI.csproj
+        run: dotnet restore ./App.Web/App.Web.csproj
         
       - name: Build
-        run: dotnet build ./App.WebAPI/App.WebAPI.csproj --configuration Release
+        run: dotnet build ./App.Web/App.Web.csproj --configuration Release
       
       - name: Publish artifact
         uses: actions/upload-artifact@v3  # Updated version
         with:
           name: app
-          path: ./App.WebAPI/bin/Release/net8.0/
+          path: ./App.Web/bin/Release/net8.0/
           
   deploy:
     needs: build

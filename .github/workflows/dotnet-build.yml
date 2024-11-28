@@ -51,7 +51,7 @@ jobs:
         uses: actions/download-artifact@v3  # Updated version
         with:
           name: app
-          path: .
+          path: ./App.Web/bin/Release/net8.0/
 
       - name: Install AWS CLI
         run: dotnet tool install -g Amazon.Lambda.Tools

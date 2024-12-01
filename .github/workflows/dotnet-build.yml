@@ -23,7 +23,7 @@ jobs:
           dotnet-version: '8.x'
           
       - name: Install dependencies Build
-        run: dotnet restore ./App.Web/App.Web.csproj
+        run: dotnet restore ./src/App.Web/App.Web.csproj
         
       - name: Build
         run: dotnet build ./src/App.Web/App.Web.csproj --configuration Release

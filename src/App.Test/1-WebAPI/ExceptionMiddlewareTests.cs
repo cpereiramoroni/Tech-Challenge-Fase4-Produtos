@@ -27,6 +27,24 @@ public class ExceptionMiddlewareTests
         mockNext.Verify(next => next(It.IsAny<HttpContext>()), Times.Once);
         Assert.Equal(HttpStatusCode.BadRequest, (HttpStatusCode)httpContext.Response.StatusCode);
     }
+    [Fact]
+    public async Task PassesWithoutExceptionAsync()
+    {
+        // Arrange
+        var mockNext = new Mock<RequestDelegate>();
+        mockNext.Setup(next => next(It.IsAny<HttpContext>()));
+
+        var middleware = new ExceptionMiddleware(mockNext.Object);
+
+        var httpContext = new DefaultHttpContext();
+
+        // Act
+        await middleware.InvokeAsync(httpContext);
+
+        // Assert
+        mockNext.Verify(next => next(It.IsAny<HttpContext>()), Times.Once);
+        Assert.Equal(HttpStatusCode.OK, (HttpStatusCode)httpContext.Response.StatusCode);
+    }
 
     [Fact]
     public async Task HandlesArgumentExceptionAsync()

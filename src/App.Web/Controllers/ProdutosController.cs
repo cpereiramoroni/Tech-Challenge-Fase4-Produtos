@@ -136,8 +136,6 @@ namespace Api.Controllers
         [Consumes("application/json")]
         public async Task<IActionResult> DeleteProdutos([FromRoute] int idProduto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
             await _produtosService.DeleteProdutoById(idProduto);
             return Ok("Produto deletado com sucesso");
         }

@@ -26,13 +26,13 @@ jobs:
         run: dotnet restore ./App.Web/App.Web.csproj
         
       - name: Build
-        run: dotnet build ./App.Web/App.Web.csproj --configuration Release
+        run: dotnet build ./src/App.Web/App.Web.csproj --configuration Release
       
       - name: Publish artifact
         uses: actions/upload-artifact@v3  # Updated version
         with:
           name: app
-          path: ./App.Web/bin/Release/net8.0/
+          path: ./src/App.Web/bin/Release/net8.0/
           
   deploy:
     needs: build
@@ -51,12 +51,12 @@ jobs:
         uses: actions/download-artifact@v3  # Updated version
         with:
           name: app
-          path: ./App.Web/bin/Release/net8.0/
+          path: ./src/App.Web/bin/Release/net8.0/
 
       - name: Install AWS CLI
         run: dotnet tool install -g Amazon.Lambda.Tools
       
       - name: Deploy to AWS Lambda
-        run: dotnet lambda deploy-serverless -sn produtoWeb -sb s3lambdafiapf4 -t App.Web/serverless.template --region us-east-1
+        run: dotnet lambda deploy-serverless -sn produtoWeb -sb s3lambdafiapf4 -t src/App.Web/serverless.template --region us-east-1
 
 

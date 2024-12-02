@@ -1,4 +1,4 @@
-# TechChallenge-Grupo24-Produts
+# TechChallenge-Grupo24-Produto
 
 Este repositório é dedicado ao microsserviço de clientes. Neste foi utilizado o mysql no RDS como banco de dados
 
